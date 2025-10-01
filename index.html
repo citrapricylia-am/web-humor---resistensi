@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        body{
+        body {
             font-family: 'Inter', sans-serif;
             background-color: #FDFBF8;
             color: #38332E;
@@ -23,11 +23,47 @@
             border-bottom: 2px solid transparent;
         }
         .nav-link.active, .nav-link:hover {
-            color: #D97706; 
+            color: #D97706;
             border-bottom-color: #D97706;
         }
 
-        /* Chart Container */
+        /* START: Flip Card Correction */
+        .card-wrapper {
+            perspective: 1000px;
+            height: 100%;
+        }
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .card-face, .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 0.5rem;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        /* END: Flip Card Correction */
+       
         .chart-container {
             position: relative;
             width: 100%;
@@ -42,40 +78,16 @@
                 height: 500px;
             }
         }
-
-        /* Word Cloud Styling */
-        .word-cloud-container-new {
-            display: flex; /* Menggunakan flex untuk tata letak yang lebih fleksibel */
-            flex-wrap: wrap; /* Memungkinkan wrapping kata */
-            justify-content: center;
-            align-items: center;
-            align-content: center;
-            gap: 0.5rem; /* Mengurangi jarak antar kata */
-        }
-        .word-cloud-word {
-            display: inline-block;
-            margin: 0.3rem; /* Menyesuaikan margin */
-            padding: 0.4rem 0.75rem;
-            border-radius: 9999px;
-            transition: all 0.3s;
-            cursor: pointer;
-            line-height: 1; /* Penting untuk kerapatan */
-            font-weight: 700;
-        }
-        .word-cloud-word:hover {
-            opacity: 0.9;
-            transform: scale(1.1);
-        }
     </style>
 </head>
 <body class="bg-[#FDFBF8] text-stone-800">
-    
+   
 <!-- Chosen Palette: Warm Earth Tones -->
-<!-- Application Structure Plan: Saya merancang aplikasi ini sebagai sebuah narasi tunggal yang dapat digulir (single-page scrollable narrative) untuk memandu pengguna dari konsep umum ke studi kasus spesifik. Strukturnya adalah: 1) Pengantar Konseptual, 2) Studi Kasus Ikonik (Warkop DKI) dengan visualisasi data untuk menunjukkan konteks, 3) Repositori Data Kuliner (Word Cloud) untuk visualisasi frekuensi kata kunci, dan 4) Analisis Sintetis. Word Cloud menggantikan galeri kartu untuk memungkinkan verifikasi data mentah secara tematik. Navigasi sticky memfasilitasi akses cepat ke setiap bagian tematik. -->
-<!-- Visualization & Content Choices: 
-1. Info: Kritik sosial Warkop DKI selama era Orde Baru. Goal: Menunjukkan korelasi antara karya Warkop dan konteks politik. Viz/Presentation: Bar chart (Chart.js/Canvas) yang memetakan jumlah film Warkop per tahun di atas garis waktu peristiwa penting Orde Baru. Interaction: Tooltip pada bar chart akan menampilkan detail film dan kritik yang relevan. Justification: Visualisasi ini lebih berdampak daripada daftar teks, secara langsung mengaitkan output kreatif dengan tekanan politik. 
-2. Info: Nama-nama makanan Indonesia yang provokatif dan analisisnya. Goal: Memvisualisasikan frekuensi tema dan kata kunci dari data mentah untuk verifikasi awal. Viz/Presentation: Word Cloud (HTML/CSS/JS) dengan tata letak flexbox yang rapat. Interaction: Ukuran kata menunjukkan frekuensi. Mengklik kata akan menampilkan detail mentah dari kata tersebut. Justification: Word Cloud adalah metode terbaik untuk eksplorasi tema data kualitatif yang masih mentah, jauh lebih baik daripada kartu atau daftar saat verifikasi diperlukan.
-3. Info: Konsep teoritis dan analisis. Goal: Menyajikan argumen akademis. Viz/Presentation: Blok teks terstruktur dengan kutipan yang menonjol (HTML/Tailwind) dan pencarian referensi via Gemini API. Justification: Memastikan keterbacaan dan fokus pada konten analitis yang padat. -->
+<!-- Application Structure Plan: Saya merancang aplikasi ini sebagai sebuah narasi tunggal yang dapat digulir (single-page scrollable narrative) untuk memandu pengguna dari konsep umum ke studi kasus spesifik. Strukturnya adalah: 1) Pengantar Konseptual, 2) Studi Kasus Ikonik (Warkop DKI) dengan visualisasi data untuk menunjukkan konteks, 3) Eksplorasi Humor Keseharian (Kuliner) dalam bentuk galeri interaktif untuk mendorong penemuan, dan 4) Analisis Sintetis. Struktur ini dipilih karena paling efektif untuk menceritakan sebuah kisah budaya yang kompleks secara linear namun interaktif, memungkinkan pengguna memahami lapisan-lapisan makna tanpa kewalahan. Navigasi sticky memfasilitasi akses cepat ke setiap bagian tematik. -->
+<!-- Visualization & Content Choices:
+1. Info: Kritik sosial Warkop DKI selama era Orde Baru. Goal: Menunjukkan korelasi antara karya Warkop dan konteks politik. Viz/Presentation: Bar chart (Chart.js/Canvas) yang memetakan jumlah film Warkop per tahun di atas garis waktu peristiwa penting Orde Baru. Interaction: Tooltip pada bar chart akan menampilkan detail film dan kritik yang relevan. Justification: Visualisasi ini lebih berdampak daripada daftar teks, secara langsung mengaitkan output kreatif dengan tekanan politik.
+2. Info: Nama-nama makanan Indonesia yang provokatif. Goal: Mengorganisir dan menampilkan berbagai contoh ekspresi folklor yang tersembunyi. Viz/Presentation: Galeri kartu interaktif (HTML/CSS/JS). Interaction: Mengklik kartu akan membaliknya ('flip') untuk menampilkan asal-usul, deskripsi, dan analisis budaya nama tersebut. Justification: Mendorong eksplorasi dan rasa ingin tahu pengguna dengan cara yang bersih dan terorganisir, lebih efektif daripada daftar panjang atau peta yang rumit untuk data kualitatif ini.
+3. Info: Konsep teoritis dan analisis. Goal: Menyajikan argumen akademis. Viz/Presentation: Blok teks terstruktur dengan kutipan yang menonjol (HTML/Tailwind). Interaction: Navigasi internal via tautan. Justification: Memastikan keterbacaan dan fokus pada konten analitis yang padat. -->
 <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
     <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
@@ -119,20 +131,13 @@
         </section>
 
         <section id="kuliner" class="mb-24">
-            <h2 class="text-3xl font-bold text-center mb-4 text-amber-800">Folklore Kuliner: Word Cloud & Repositori Data</h2>
+            <h2 class="text-3xl font-bold text-center mb-4 text-amber-800">Folklore Kuliner: Repositori Data Lapangan</h2>
             <p class="text-base text-center max-w-4xl mx-auto text-stone-600 mb-10">
-                **Word Cloud** di bawah ini memvisualisasikan frekuensi kata kunci dari semua nama makanan dan analisis yang Anda kumpulkan. Gunakan Word Cloud untuk mengidentifikasi tema-tema yang sering muncul dan memerlukan verifikasi lebih lanjut. **Ukuran kata menunjukkan frekuensi.** Klik pada kata untuk melihat studi kasus yang mengandung kata tersebut.
+                Bagian ini adalah repositori studi kasus kuliner yang dikumpulkan. Setiap kartu mewakili ekspresi folklor lokal dan analisis budaya yang menyertainya. Anda dapat menambahkan data lapangan baru secara manual melalui tombol di bawah.
             </p>
-            
-            <div id="word-cloud-container" class="word-cloud-container-new bg-white p-8 rounded-xl shadow-lg min-h-[300px]">
-                <!-- Word Cloud akan dirender di sini -->
+            <div id="food-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
-            
-            <div id="word-detail-output" class="mt-8 p-4 bg-stone-100 rounded-lg text-sm text-stone-700 hidden">
-                <h4 class="font-bold text-amber-800 mb-2">Detail Studi Kasus yang Mengandung Kata Kunci "<span id="detail-word" class="text-amber-600"></span>"</h4>
-                <ul id="detail-list" class="list-disc list-inside space-y-1"></ul>
-            </div>
-            
+           
             <!-- Fitur Manual Input Repositori -->
             <div class="mt-12 text-center">
                 <button id="add-food-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-full transition shadow-md shadow-amber-300">
@@ -143,7 +148,7 @@
 
         <section id="analisis" class="bg-white p-8 rounded-xl shadow-lg">
             <h2 class="text-3xl font-bold text-center mb-8 text-amber-800">Analisis Budaya: Mengapa Humor Begitu Kuat?</h2>
-            
+           
             <!-- Gemini Feature 1: Pencarian Referensi Akademis Lanjutan (Tetap Aktif) -->
             <div class="mb-8 p-6 bg-amber-50 rounded-lg border border-amber-200">
                 <h3 class="text-xl font-semibold mb-3 text-amber-800">Cari Referensi Akademis (Gemini)</h3>
@@ -165,7 +170,7 @@
                     <!-- Output goes here -->
                 </div>
             </div>
-            
+           
             <div class="grid md:grid-cols-2 gap-8">
                 <div>
                     <h3 class="text-xl font-semibold mb-3 text-amber-700">Katarsis dan Katup Pengaman</h3>
@@ -186,7 +191,7 @@
             </div>
         </section>
     </main>
-    
+   
     <!-- Modal Input Data Baru -->
     <div id="data-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[100]">
         <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-lg mx-4">
@@ -205,12 +210,12 @@
                     <textarea id="input-desc" rows="2" required class="mt-1 block w-full p-2 border border-stone-300 rounded-md"></textarea>
                 </div>
                 <div>
-                    <label for="input-analysis" class="block text-sm font-medium text-stone-700">Analisis Antropologis/Budaya (Sertakan kata kunci penting)</label>
+                    <label for="input-analysis" class="block text-sm font-medium text-stone-700">Analisis Antropologis/Budaya</label>
                     <textarea id="input-analysis" rows="3" required class="mt-1 block w-full p-2 border border-stone-300 rounded-md"></textarea>
                 </div>
                 <div class="flex justify-end space-x-3 pt-4">
                     <button type="button" id="close-modal-btn" class="px-4 py-2 text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-md transition">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-amber-600 text-white hover:bg-amber-700 rounded-md transition">Tambahkan Data</button>
+                    <button type="submit" class="px-4 py-2 bg-amber-600 text-white hover:bg-amber-700 rounded-md transition">Tambahkan ke Repositori</button>
                 </div>
             </form>
         </div>
@@ -221,12 +226,13 @@
     </footer>
 
     <script>
-        const API_KEY = ""; 
+        const API_KEY = "";
         const API_URL_TEXT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
-        
-        // Fungsi utilitas untuk fetch API
+       
+        // Fungsi untuk menunda eksekusi (untuk exponential backoff)
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+        // Fungsi untuk melakukan fetch dengan exponential backoff
         async function fetchWithRetry(url, options, maxRetries = 5) {
             for (let i = 0; i < maxRetries; i++) {
                 try {
@@ -247,8 +253,9 @@
                 }
             }
         }
-        
-        // FUNGSI GEMINI (PENCARIAN REFERENSI)
+       
+        // FUNGSI UTAMA UNTUK FITUR GEMINI (PENCARIAN REFERENSI TETAP)
+       
         async function searchAcademicReferences() {
             const queryInput = document.getElementById('ref-query');
             const outputDiv = document.getElementById('ref-output');
@@ -264,23 +271,23 @@
             searchBtn.disabled = true;
 
             const systemPrompt = `Anda adalah pustakawan dan antropolog ahli. Berikan ringkasan singkat dalam satu paragraf (maksimal 100 kata) tentang relevansi konsep antropologi atau sosiologi berikut terhadap studi komedi dan perlawanan rakyat. Sertakan nama penulis atau teori kunci. Jawab dalam bahasa Indonesia.`;
-            
+           
             const payload = {
                 contents: [{ parts: [{ text: `Tolong jelaskan konsep: "${userQuery}"` }] }],
                 tools: [{ "google_search": {} }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
             };
-            
+           
             try {
                 const response = await fetchWithRetry(API_URL_TEXT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                
+               
                 const result = await response.json();
                 const candidate = result.candidates?.[0];
-                
+               
                 if (candidate && candidate.content?.parts?.[0]?.text) {
                     const text = candidate.content.parts[0].text;
                     let sources = [];
@@ -328,20 +335,116 @@
                 searchBtn.disabled = false;
             }
         }
-        
-        // DATA REPOSITORI DAN FUNGSI WORD CLOUD
-        
+       
+        // FUNGSI UTAMA UNTUK FITUR REPOSITORI MANUAL
+       
         const foodData = [
-            { name: "Kontol Kejepit", origin: "Bantul", description: "Kue tradisional berbentuk vulgar.", analysis: "Guyon maton, pelepasan ketegangan terhadap norma kesopanan yang kaku. Mengandung kata kunci: vulgar, Jawa, norma." },
-            { name: "Kue Memek", origin: "Simeulue", description: "Bubur ketan pisang.", analysis: "Perbedaan makna kata, identitas budaya lokal, otentik." },
-            { name: "Cendol Jembut", origin: "Purworejo", description: "Es dawet hitam di bawah jembatan butuh.", analysis: "Kreativitas linguistik, branding akar rumput, legenda lokal." },
-            { name: "Peler Kambing", origin: "Bali", description: "Jajanan singkong gula merah.", analysis: "Analogi visual vulgar, menjinakkan tabu, humor." },
-            { name: "Nasi Kentut", origin: "Medan", description: "Nasi dimasak dengan daun sembukan.", analysis: "Kejujuran deskriptif, melawan citra ideal, khasiat kesehatan." },
-            { name: "Kue Tete", origin: "Jakarta", description: "Kue Ape Betawi.", analysis: "Humor urban Betawi, analogi visual, folklor kota." }
+            {
+                name: "Kontol Kejepit",
+                origin: "Bantul, Yogyakarta",
+                image: "https://placehold.co/600x400/F59E0B/333?text=Kue+Jepit+Kacang+Hijau",
+                description: "Kue tradisional berwarna coklat muda dengan isian kacang hijau atau enten-enten kelapa. Namanya berasal dari bentuknya yang mirip alat kelamin pria ('kontol') yang seolah 'kejepit' saat proses pembuatannya.",
+                analysis: "Penamaan ini adalah bentuk 'guyon maton' (candaan sopan) khas Jawa. Dengan menamai sesuatu yang sakral (makanan) dengan nama vulgar, terjadi pelepasan ketegangan terhadap norma kesopanan yang kaku."
+            },
+            {
+                name: "Kue Memek",
+                origin: "Simeulue, Aceh",
+                image: "https://placehold.co/600x400/D97706/333?text=Bubur+Ketan+Pisang",
+                description: "Bubur atau penganan yang terbuat dari beras ketan, pisang, dan santan. Nama 'memek' berasal dari kata 'mamemek' dalam bahasa setempat yang artinya mengunyah atau menggigit. Telah diakui sebagai Warisan Budaya Takbenda.",
+                analysis: "Contoh bagaimana sebuah kata bisa memiliki makna berbeda tergantung konteks budaya. Meskipun terdengar tabu di luar Simeulue, nama ini adalah deskripsi proses dan bagian dari identitas lokal yang otentik."
+            },
+            {
+                name: "Cendol Jembut",
+                origin: "Purworejo, Jawa Tengah",
+                image: "https://placehold.co/600x400/B45309/333?text=Dawet+Hitam+Purworejo",
+                description: "Es cendol dawet hitam yang dijual di bawah jembatan butuh ('Jembut'). Awalnya hanya dikenal sebagai Dawet Ireng, nama 'Jembut' menjadi populer sebagai akronim lokasi yang jenaka dan mudah diingat.",
+                analysis: "Ini adalah contoh kreativitas linguistik dan 'branding' akar rumput. Akronim yang provokatif membuat produk ini menonjol dan menjadi legenda lokal, menunjukkan kekuatan humor dalam pemasaran informal."
+            },
+            {
+                name: "Peler Kambing",
+                origin: "Bali",
+                image: "https://placehold.co/600x400/92400E/333?text=Jajanan+Singkong+Gula+Merah",
+                description: "Jajanan pasar dari singkong parut yang dicampur gula merah, dibentuk lonjong, lalu direbus. Nama ini merujuk pada bentuknya yang dianggap mirip testis kambing.",
+                analysis: "Sama seperti Kontol Kejepit, penamaan ini menggunakan analogi visual yang vulgar untuk menciptakan humor. Ini adalah cara masyarakat 'menjinakkan' hal-hal tabu dengan membawanya ke ranah sehari-hari seperti makanan."
+            },
+            {
+                name: "Nasi Kentut",
+                origin: "Medan, Sumatera Utara",
+                image: "https://placehold.co/600x400/78350F/333?text=Nasi+Daun+Sembukan",
+                description: "Nasi yang dimasak dengan daun sembukan (Paederia foetida), yang memiliki aroma khas seperti kentut saat diremas. Daun ini dipercaya memiliki khasiat untuk melancarkan pencernaan.",
+                analysis: "Di sini, nama yang tidak biasa justru berfungsi sebagai penanda khasiat dan keunikan bahan. Humor muncul dari kejujuran deskriptif yang melawan citra ideal makanan yang seharusnya selalu 'harum' dan 'sedap'."
+            },
+             {
+                name: "Kue Tete",
+                origin: "Jakarta (Betawi)",
+                image: "https://placehold.co/600x400/CA8A04/333?text=Kue+Ape+Betawi",
+                description: "Kue Ape atau 'kue tete' adalah jajanan khas Betawi yang berbentuk lingkaran dengan bagian tengah yang menonjol dan lembut, dikelilingi oleh pinggiran yang renyah. Bentuknya yang dianggap menyerupai payudara ('tete') membuatnya mendapat julukan tersebut.",
+                analysis: "Penamaan ini adalah cerminan dari humor urban Betawi yang ceplas-ceplos dan berbasis pada analogi visual. Ini menunjukkan bagaimana kehidupan kota yang dinamis juga menghasilkan folklornya sendiri yang unik dan sedikit nakal."
+            }
         ];
 
-        // Stopwords (kata-kata umum yang diabaikan dalam Word Cloud)
-        const stopWords = new Set(['yang', 'dari', 'dan', 'dengan', 'di', 'adalah', 'ini', 'sebagai', 'pada', 'atau', 'untuk', 'itu', 'cara', 'ke', 'untuk', 'bahwa', 'suatu', 'oleh', 'tentang', 'serta', 'bagian', 'dalam', 'mereka', 'saja', 'juga', 'agar', 'bisa', 'saat', 'para', 'sebuah', 'hingga', 'kue', 'nasi', 'bubur', 'es']);
+        function createFoodCardHTML(food) {
+            const isNew = food.isNew ? ' (Data Manual)' : '';
+            const imagePlaceholder = food.image || `https://placehold.co/600x400/3B82F6/EEE?text=${food.name.replace(/ /g, '+')}`; // Placeholder biru untuk data baru
+           
+            return `
+                <div class="card-wrapper h-80">
+                    <div class="card w-full h-full">
+                        <div class="card-face relative w-full h-full overflow-hidden">
+                            <img src="${imagePlaceholder}" alt="${food.name}" class="w-full h-full object-cover rounded-lg">
+                            <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/70 to-transparent rounded-b-lg">
+                                <h3 class="text-white text-2xl font-bold">${food.name}${isNew}</h3>
+                                <p class="text-amber-200 text-sm">${food.origin}</p>
+                            </div>
+                        </div>
+                        <div class="card-back absolute w-full h-full bg-white flex flex-col justify-between rounded-lg">
+                            <div class="p-6 overflow-y-auto flex-grow">
+                                <h4 class="font-bold text-lg text-amber-800">${food.name}</h4>
+                                <p class="text-sm text-stone-600 mt-2">${food.description}</p>
+                                <p class="text-sm text-stone-700 mt-4 italic border-l-4 border-amber-500 pl-3"><strong>Analisis:</strong> ${food.analysis}</p>
+                            </div>
+                            <p class="text-xs text-center text-stone-400 p-2 border-t">Klik untuk kembali</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFoodCards(data) {
+            const gallery = document.getElementById('food-gallery');
+            // Clear existing content and render all data
+            gallery.innerHTML = '';
+            data.forEach(food => {
+                gallery.innerHTML += createFoodCardHTML(food);
+            });
+
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('is-flipped');
+                });
+            });
+        }
+       
+        function addNewFoodCase(event) {
+            event.preventDefault();
+
+            const newFood = {
+                name: document.getElementById('input-name').value,
+                origin: document.getElementById('input-origin').value,
+                description: document.getElementById('input-desc').value,
+                analysis: document.getElementById('input-analysis').value,
+                isNew: true, // Marker bahwa data ini diinput manual
+                image: `https://placehold.co/600x400/3B82F6/EEE?text=${document.getElementById('input-name').value.replace(/ /g, '+')}` // Placeholder biru
+            };
+           
+            foodData.push(newFood);
+            renderFoodCards(foodData); // Re-render seluruh galeri
+           
+            // Close modal and reset form
+            document.getElementById('data-modal').classList.add('hidden');
+            document.getElementById('data-modal').classList.remove('flex');
+            document.getElementById('new-food-form').reset();
+        }
 
         function generateWordCloud(data) {
             const wordFrequencies = {};
@@ -364,101 +467,41 @@
                 }
             });
 
-            // Urutkan dan batasi jumlah kata yang ditampilkan
-            const sortedWords = Object.entries(wordFrequencies).sort(([, a], [, b]) => b - a).slice(0, 50);
-
-            if (sortedWords.length === 0) {
-                container.innerHTML = '<p class="text-stone-500 text-lg">Tidak ada kata kunci yang cukup untuk membuat Word Cloud. Tambahkan data studi kasus.</p>';
-                return;
-            }
-
-            // Tentukan skala ukuran font
-            const maxCount = sortedWords[0][1];
-            const minCount = sortedWords.length > 1 ? sortedWords[sortedWords.length - 1][1] : maxCount;
-            const maxFontSize = 3.5; // rem
-            const minFontSize = 0.9; // rem
-
-            // Palet warna yang lebih tematik
-            const colors = ['#D97706', '#B45309', '#92400E', '#78350F']; 
-
-            sortedWords.forEach(([word, count]) => {
-                // Hitung ukuran font secara linier 
-                let size = minFontSize;
-                if (maxCount !== minCount) {
-                     size = minFontSize + (maxFontSize - minFontSize) * ((count - minCount) / (maxCount - minCount) || 0);
-                } else if (maxCount > 0) {
-                     size = (maxFontSize + minFontSize) / 2;
+            // Buat Word Cloud
+            const wordCloud = new WordCloud(container, {
+                list: Object.entries(wordFrequencies),
+                gridSize: Math.round(16 * container.offsetWidth / 1024),
+                weightFactor: 1,
+                fontFamily: 'Inter',
+                color: 'random-dark',
+                backgroundColor: '#FDFBF8',
+                rotateRatio: 0.3,
+                rotationSteps: 2,
+                drawOutOfBound: false,
+                shuffle: true,
+                shape: 'circle',
+                ellipticity: 0.65,
+                minRotation: -0.25,
+                maxRotation: 0.25,
+                minSize: 10,
+                maxSize: 100,
+                minWeight: 1,
+                maxWeight: 10,
+                clearCanvas: true,
+                hover: function(item, dimension, event) {
+                    container.style.cursor = 'pointer';
+                },
+                click: function(item, dimension, event) {
+                    console.log(item);
+                },
+                onWordCloudRendered: function() {
+                    container.style.cursor = 'default';
                 }
-                
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                const bgColor = color + '20'; // Opacity 20
-
-                const wordElement = document.createElement('span');
-                wordElement.className = 'word-cloud-word';
-                wordElement.textContent = word;
-                wordElement.style.fontSize = `${size}rem`;
-                wordElement.style.backgroundColor = bgColor;
-                wordElement.style.color = color;
-                
-                wordElement.addEventListener('click', () => showWordDetail(word));
-                
-                container.appendChild(wordElement);
             });
-        }
-
-        function showWordDetail(word) {
-            const detailOutput = document.getElementById('word-detail-output');
-            const detailWord = document.getElementById('detail-word');
-            const detailList = document.getElementById('detail-list');
-
-            detailWord.textContent = word;
-            detailList.innerHTML = '';
-
-            // Cari semua item data yang mengandung kata kunci ini
-            const matchingItems = foodData.filter(item => 
-                (item.name + ' ' + item.analysis).toLowerCase().includes(word)
-            );
-
-            if (matchingItems.length === 0) {
-                detailList.innerHTML = `<li>Tidak ditemukan studi kasus yang secara eksplisit mengandung kata kunci "${word}".</li>`;
-            } else {
-                matchingItems.forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `<strong>${item.name}</strong> (${item.origin}): ${item.analysis}`;
-                    detailList.appendChild(listItem);
-                });
-            }
-            
-            detailOutput.classList.remove('hidden');
-        }
-
-        function addNewFoodCase(event) {
-            event.preventDefault();
-
-            const newFood = {
-                name: document.getElementById('input-name').value,
-                origin: document.getElementById('input-origin').value,
-                description: document.getElementById('input-desc').value,
-                analysis: document.getElementById('input-analysis').value,
-            };
-            
-            foodData.push(newFood);
-            generateWordCloud(foodData); // Generate ulang Word Cloud
-            
-            // Close modal and reset form
-            document.getElementById('data-modal').classList.add('hidden');
-            document.getElementById('data-modal').classList.remove('flex');
-            document.getElementById('new-food-form').reset();
-            
-            // Sembunyikan detail output lama
-            document.getElementById('word-detail-output').classList.add('hidden');
         }
 
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Inisialisasi Word Cloud saat load
-            generateWordCloud(foodData);
-            
             // Data Warkop Chart
             const warkopData = {
                 labels: ['1979-80', '1981-82', '1983-84', '1985-86', '1987-88', '1989-90', '1991-92', '1993-94'],
@@ -513,6 +556,9 @@
                 }
             });
 
+            // Initial render of food cards
+            renderFoodCards(foodData);
+           
             // Event Listeners for Gemini Feature (Pencarian Referensi)
             document.getElementById('search-ref-btn').addEventListener('click', searchAcademicReferences);
             document.getElementById('ref-query').addEventListener('keypress', function(e) {
@@ -521,12 +567,12 @@
 
             // Event Listeners for Manual Input Feature
             const modal = document.getElementById('data-modal');
-            
+           
             document.getElementById('add-food-btn').addEventListener('click', () => {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
             });
-            
+           
             document.getElementById('close-modal-btn').addEventListener('click', () => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
@@ -542,7 +588,7 @@
             function changeNav() {
                 let index = sections.length;
                 while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
-                
+               
                 navLinks.forEach((link) => link.classList.remove('active'));
                 const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
                 if (activeLink) {
